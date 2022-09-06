@@ -1,0 +1,22 @@
+version: '3'
+services:
+    postgres:
+        image: postgres:latest
+        environment:
+            - POSTGRES_PASSWORD=postgres
+    backend_app:
+        build: .
+        container_name: library_backend
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_PORT=5432
+            - POSTGRES_DB=postgres
+            - POSTGRES_HOST=postgres
+            - DJANGO_SETTINGS_MODULE=src.settings
+        volumes:
+            - .:/var/www
+        ports:
+            - 8000:8000
+        depends_on:
+            - postgres
