@@ -20,3 +20,14 @@ services:
             - 8000:8000
         depends_on:
             - postgres
+    frontend_app:
+        build:
+            context: ./library_front
+            dockerfile: Dockerfile
+        container_name: library_frontend
+        volumes:
+            - './library_front:/app'
+        ports:
+            - '3000:3000'
+        depends_on:
+            - backend_app
