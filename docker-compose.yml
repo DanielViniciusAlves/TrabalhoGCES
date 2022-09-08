@@ -3,13 +3,17 @@ services:
     postgres:
         image: postgres:latest
         environment:
-            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_PASSWORD=password
+        networks: 
+            - my-network
     backend_app:
-        build: .
+        build:
+            context: ./library_back
+            dockerfile: Dockerfile
         container_name: library_backend
         environment:
             - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_PASSWORD=password
             - POSTGRES_PORT=5432
             - POSTGRES_DB=postgres
             - POSTGRES_HOST=postgres
@@ -18,8 +22,11 @@ services:
             - .:/var/www
         ports:
             - 8000:8000
+        networks: 
+            - my-network
         depends_on:
             - postgres
+
     frontend_app:
         build:
             context: ./library_front
@@ -30,4 +37,23 @@ services:
         ports:
             - '3000:3000'
         depends_on:
+            - postgres
             - backend_app
+        networks: 
+            - my-network
+    nginx:
+        build:
+            dockerfile: Dockerfile
+            context: ./nginx
+        image: nginx
+        container_name: nginx
+        ports:
+            - "80:80"
+        networks: 
+            - my-network
+        depends_on:
+            - frontend_app
+            - backend_app
+networks: 
+    my-network:
+        driver: bridge

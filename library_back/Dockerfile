@@ -2,7 +2,7 @@ FROM python:3.10.4
 
 ENV PYTHONUNBUFFERED = 1
 
-COPY library_back /
+COPY requirements.txt /
 
 RUN pip install -r requirements.txt
 
