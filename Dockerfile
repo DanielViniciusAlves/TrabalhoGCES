@@ -1,5 +1,7 @@
 FROM python:3.10.4
 
+WORKDIR /library_back
+
 ENV PYTHONUNBUFFERED = 1
 
 COPY requirements.txt /
@@ -11,6 +13,8 @@ WORKDIR /var/www
 CMD ["python", "library_back/manage.py", "runserver", "0.0.0.0:8000"]
 
 FROM node:lts-alpine
+
+WORKDIR /../library_front
 
 COPY package.json /
 
